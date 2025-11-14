@@ -107,10 +107,29 @@
         <h1>❤️ Heartline Care Companion</h1>
         <p class="subtitle">Your personal mental health companion</p>
         <div class="loading"></div>
-        <p>Redirecting you to the app...</p>
+        <p id="redirect-status">Redirecting you to the app...</p>
+        <p id="redirect-countdown" aria-live="polite"></p>
         <a href="https://heartlinecompanion.streamlit.app/" class="link">
             Click here if not redirected
         </a>
     </div>
+    <script>
+        const targetUrl = 'https://heartlinecompanion.streamlit.app/';
+        const redirectDelayMs = 1500; // quick auto-redirect with brief heads-up
+        const countdownEl = document.getElementById('redirect-countdown');
+        const start = performance.now();
+        
+        const updateCountdown = () => {
+            const elapsed = performance.now() - start;
+            const timeLeft = Math.max(0, redirectDelayMs - elapsed);
+            countdownEl.textContent = `Taking you there in ${(timeLeft / 1000).toFixed(1)}s...`;
+            if (timeLeft > 0) {
+                requestAnimationFrame(updateCountdown);
+            }
+        };
+        
+        requestAnimationFrame(updateCountdown);
+        setTimeout(() => window.location.replace(targetUrl), redirectDelayMs);
+    </script>
 </body>
 </html>
